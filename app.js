@@ -17,6 +17,7 @@ let day = date.getDate()
 
 mongoose.connect("mongodb://localhost:27017/todolistDB", { useNewUrlParser: true });
 
+//Making the items needed inside the todolist
 const itemsSchema = {
     name: String
 };
@@ -35,8 +36,10 @@ const item3 = new Item({
     name: "Hit - to delete Lists"
 });
 
+//Creating Defualt items to show in every new list
 const defaultItems = [item1, item2, item3];
 
+//Making New Todolist
 const listSchema = {
     name: String,
     items: [itemsSchema]
@@ -45,9 +48,9 @@ const listSchema = {
 const List = mongoose.model("List", listSchema);
 
 
+//home route
 app.get("/", (req, res) => {
     let day = date.getDate()
-
 
     Item.find({}, (err, foundItems) => {
         if (foundItems.length == 0) {
@@ -55,7 +58,7 @@ app.get("/", (req, res) => {
                 if (err) {
                     console.log("There is an error");
                 } else {
-                    console.log("Sucelly added");
+                    console.log("Successfully added");
                 }
             });
             res.redirect('/ ')
@@ -73,7 +76,6 @@ app.post("/", (req, res) => {
 
     const itemName = req.body.newItem;
     const listName = req.body.list;
-    let day = date.getDate()
 
     const item = new Item({
         name: itemName
@@ -141,12 +143,6 @@ app.get("/:customListName", (req, res) => {
 
 });
 
-// app.post("/work", (req, res) => {
-
-//     let item = req.body.newItem;
-//     workItems.push(item);
-//     res.redirect("/work");
-// })
 app.listen(3000, () => {
     console.log("Server Running ok");
 })
